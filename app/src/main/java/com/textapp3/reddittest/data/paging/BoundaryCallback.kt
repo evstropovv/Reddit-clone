@@ -1,4 +1,4 @@
-package com.textapp3.reddittest.ui.paging
+package com.textapp3.reddittest.data.paging
 
 import androidx.paging.PagedList
 import com.textapp3.reddittest.data.Mapper
@@ -26,6 +26,7 @@ class BoundaryCallback @Inject constructor(
         super.onZeroItemsLoaded()
         scope.launch(Dispatchers.IO) {
             val posts = try {
+                retry=null
                 api.getPosts().data.children.map { mapper.toEntity(it.data) }
             } catch (e: Exception) {
                 errorListener.invoke(true)
