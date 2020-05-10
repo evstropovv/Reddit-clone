@@ -7,14 +7,13 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-
 @Module
 class FoodiumDatabaseModule {
 
     @Singleton
     @Provides
     fun provideDatabase(application: Application) =
-        Room.inMemoryDatabaseBuilder(application, PagingDatabase::class.java)
+        Room.databaseBuilder(application, PagingDatabase::class.java, "redditposts.db")
             .build()
 
 }
