@@ -7,12 +7,9 @@ import com.textapp3.reddittest.data.db.RedditPostDao
 import com.textapp3.reddittest.data.db.RedditPostEntity
 import com.textapp3.reddittest.data.network.RedditService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import javax.inject.Inject
 
-class BoundaryCallback @Inject constructor(
+class BoundaryCallback constructor(
     private val scope: CoroutineScope,
     private val db: RedditPostDao,
     private val api: RedditService,
@@ -24,9 +21,9 @@ class BoundaryCallback @Inject constructor(
 
     override fun onZeroItemsLoaded() {
         super.onZeroItemsLoaded()
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             val posts = try {
-                retry=null
+                retry = null
                 api.getPosts().data.children.map { mapper.toEntity(it.data) }
             } catch (e: Exception) {
                 errorListener.invoke(true)
@@ -41,11 +38,10 @@ class BoundaryCallback @Inject constructor(
 
     override fun onItemAtEndLoaded(itemAtEnd: RedditPost) {
         super.onItemAtEndLoaded(itemAtEnd)
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             val posts = try {
                 retry = null
                 api.getPosts(after = itemAtEnd.key).data.children.map { mapper.toEntity(it.data) }
-
             } catch (e: Exception) {
                 errorListener.invoke(true)
                 retry = {

@@ -11,10 +11,7 @@ abstract class PagingDatabase : RoomDatabase() {
 @Dao
 interface RedditPostDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(posts : List<RedditPostEntity>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(posts : RedditPostEntity)
+    suspend fun insert(posts : List<RedditPostEntity>)
 
     @Query("SELECT * FROM RedditPostEntity")
     fun posts() : DataSource.Factory<Int, RedditPostEntity>
